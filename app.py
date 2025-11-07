@@ -1,12 +1,12 @@
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) #ver si es necesario
 
 # --- Modelo difuso ---
 ingresos = ctrl.Antecedent(np.arange(0, 10.1, 0.1), 'ingresos')
@@ -40,6 +40,10 @@ rules = [
 
 credit_ctrl = ctrl.ControlSystem(rules)
 credit_simulation = ctrl.ControlSystemSimulation(credit_ctrl)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/evaluar', methods=['POST'])
 def evaluar():
